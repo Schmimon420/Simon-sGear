@@ -298,5 +298,161 @@
   <!-- Cookie-Banner Skript -->
   <script src="assets/js/cookie-banner.js"></script>
 
+  <!-- Cookie-Banner Skript (Keine Flicker) -->
+  <script>
+	// --- Cookie-Banner Initialisierung ---
+	function initializeCookieBanner() {
+	  const banner = document.getElementById("cookie-banner");
+	  if (!banner) {
+		console.error("Cookie-Banner nicht gefunden! Wurde es geladen?");
+		return;
+	  }
+  
+	  // Buttons
+	  const acceptAllButton      = document.getElementById("accept-all");
+	  const acceptSelectedButton = document.getElementById("accept-selected");
+	  const declineAllButton     = document.getElementById("decline-all");
+  
+	  // Checkboxen
+	  const analyticsCheckbox  = document.getElementById("analytics-cookies");
+	  const marketingCheckbox  = document.getElementById("marketing-cookies");
+  
+	  if (!acceptAllButton || !acceptSelectedButton || !declineAllButton) {
+		console.error("Ein oder mehrere Buttons fehlen!");
+		return;
+	  }
+  
+	  // Cookies setzen
+	  function setCookie(name, value, days) {
+		let date = new Date();
+		date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+		document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax;Secure`;
+	  }
+  
+	  // Cookies auslesen
+	  function getCookie(name) {
+		let cookies = document.cookie.split("; ");
+		for (let cookie of cookies) {
+		  let [cookieName, cookieValue] = cookie.split("=");
+		  if (cookieName === name) {
+			return cookieValue;
+		  }
+		}
+		return null;
+	  }
+  
+	  // gtag sicherstellen
+	  window.gtag = window.gtag || function() { dataLayer.push(arguments); };
+  
+	  // Aktualisiert den Consent-Status für Google Consent Mode
+	  function updateConsentStatus() {
+		const analyticsConsent  = getCookie("analyticsConsent")  === "true";
+		const marketingConsent  = getCookie("marketingConsent")  === "true";
+  
+		// Consent-Update an gtag
+		gtag("consent", "update", {
+		  analytics_storage:   analyticsConsent ? "granted" : "denied",
+		  ad_storage:          marketingConsent ? "granted" : "denied",
+		  functionality_storage: "granted",
+		  personalization_storage: marketingConsent ? "granted" : "denied",
+		  ad_personalization: marketingConsent ? "granted" : "denied",
+		  security_storage: "granted"
+		});
+  
+		console.log("Consent aktualisiert:", {
+		  analytics: analyticsConsent,
+		  marketing: marketingConsent
+		});
+  
+		// Für den Tag Manager
+		gtag('event', 'consent_update');
+	  }
+  
+	  // Prüft vorhandenen Consent und blendet das Banner nur ein, wenn nötig
+	  function checkExistingConsent() {
+		const cookieConsent = getCookie("cookieConsent");
+		let analyticsConsent = getCookie("analyticsConsent");
+		let marketingConsent = getCookie("marketingConsent");
+  
+		// Banner ist standardmäßig "display: none;"
+		// → Nur zeigen, wenn der Nutzer NOCH nicht entschieden hat
+		if (cookieConsent === "true") {
+		  analyticsCheckbox.checked = (analyticsConsent === "true");
+		  marketingCheckbox.checked = (marketingConsent === "true");
+		  // Banner bleibt unsichtbar
+		} else if (cookieConsent === "false") {
+		  analyticsConsent = "false";
+		  marketingConsent = "false";
+		  // Banner bleibt unsichtbar
+		} else {
+		  // Noch keine Entscheidung -> Banner anzeigen
+		  banner.style.display = "flex";
+		}
+  
+		// dataLayer-Event "gtm.init_consent"
+		window.dataLayer = window.dataLayer || [];
+		window.dataLayer.push({
+		  event: "gtm.init_consent",
+		  analytics_storage: (analyticsConsent === "true") ? "granted" : "denied",
+		  ad_storage: (marketingConsent === "true") ? "granted" : "denied",
+		  functionality_storage: "granted",
+		  personalization_storage: (marketingConsent === "true") ? "granted" : "denied",
+		  ad_personalization: (marketingConsent === "true") ? "granted" : "denied",
+		  security_storage: "granted"
+		});
+  
+		console.log("gtm.init_consent gesendet", {
+		  analytics_storage: analyticsConsent,
+		  ad_storage: marketingConsent
+		});
+  
+		updateConsentStatus();
+	  }
+  
+	  // Beim Laden prüfen
+	  checkExistingConsent();
+  
+	  // Click Handler: Alle akzeptieren
+	  acceptAllButton.addEventListener("click", () => {
+		setCookie("cookieConsent",      "true", 365);
+		setCookie("analyticsConsent",   "true", 365);
+		setCookie("marketingConsent",   "true", 365);
+		banner.style.display = "none";
+		updateConsentStatus();
+	  });
+  
+	  // Click Handler: Auswahl speichern
+	  acceptSelectedButton.addEventListener("click", () => {
+		setCookie("cookieConsent",      "true", 365);
+		setCookie("analyticsConsent",   analyticsCheckbox.checked ? "true" : "false", 365);
+		setCookie("marketingConsent",   marketingCheckbox.checked ? "true" : "false", 365);
+		banner.style.display = "none";
+		updateConsentStatus();
+	  });
+  
+	  // Click Handler: Alle ablehnen
+	  declineAllButton.addEventListener("click", () => {
+		setCookie("cookieConsent",      "false", 365);
+		setCookie("analyticsConsent",   "false", 365);
+		setCookie("marketingConsent",   "false", 365);
+		banner.style.display = "none";
+		updateConsentStatus();
+	  });
+	}
+  
+	// DOMContentLoaded → Cookie Banner initialisieren
+	document.addEventListener("DOMContentLoaded", function () {
+	  if (document.getElementById("cookie-banner")) {
+		initializeCookieBanner();
+	  } else {
+		console.log("Warte auf das Laden des Cookie-Banners...");
+		setTimeout(initializeCookieBanner, 500);
+	  }
+	});
+	</script>
+
+
+
+
 </body>
 </html>
