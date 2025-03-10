@@ -1,4 +1,3 @@
-// Initialisiere das Cookie-Banner
 function initializeCookieBanner() {
   const banner = document.getElementById("cookie-banner");
   const acceptAllButton = document.getElementById("accept-all");
@@ -8,30 +7,28 @@ function initializeCookieBanner() {
   const marketingCheckbox = document.getElementById("marketing-cookies");
 
   if (!banner || !acceptAllButton || !acceptSelectedButton || !declineAllButton || !analyticsCheckbox || !marketingCheckbox) {
-    console.error("Cookie-Banner oder Buttons/Checkboxes nicht gefunden!");
+    console.error("Elemente fehlen im Cookie-Banner!");
     return;
   }
 
-  // Cookies setzen
+  // Cookie setzen
   function setCookie(name, value, days) {
     let date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
   }
 
-  // Cookies auslesen
+  // Cookie auslesen
   function getCookie(name) {
     let cookies = document.cookie.split("; ");
     for (let cookie of cookies) {
       let [cookieName, cookieValue] = cookie.split("=");
-      if (cookieName === name) {
-        return cookieValue;
-      }
+      if (cookieName === name) return cookieValue;
     }
     return null;
   }
 
-  // Google Tag aktualisieren
+  // Consent aktualisieren und an GTM senden
   function updateConsentStatus() {
     const analyticsConsent = getCookie("analyticsConsent") === "true";
     const marketingConsent = getCookie("marketingConsent") === "true";
@@ -47,54 +44,27 @@ function initializeCookieBanner() {
       security_storage: "granted"
     });
 
-    console.log("Consent aktualisiert:", {
-      analytics: analyticsConsent,
-      marketing: marketingConsent,
-    });
+    console.log("Consent aktualisiert:", { analyticsConsent, marketingConsent });
   }
 
-  // Prüfe vorhandene Zustimmung und aktualisiere den Consent-Status direkt beim Laden der Seite
+  // Bestehenden Consent prüfen und Banner anzeigen/verbergen
   function checkExistingConsent() {
-    const cookieConsent = getCookie("cookieConsent");
-    const analyticsConsent = getCookie("analyticsConsent") === "true";
-    const marketingConsent = getCookie("marketingConsent") === "true";
-
-    if (cookieConsent === "true") {
-      analyticsCheckbox.checked = analyticsConsent;
-      marketingCheckbox.checked = marketingConsent;
+    const consentGiven = getCookie("cookieConsent");
+    if (consentGiven === "true") {
+      analyticsCheckbox.checked = getCookie("analyticsConsent") === "true";
+      marketingCheckbox.checked = getCookie("marketingConsent") === "true";
       banner.style.display = "none";
-    } else if (cookieConsent === "false") {
+    } else if (consentGiven === "false") {
       banner.style.display = "none";
     } else {
       banner.style.display = "flex";
     }
 
-    // Consent Status an GTM übermitteln
-    window.dataLayer = window.dataLayer || [];
-    dataLayer.push({
-      event: "gtm.init_consent",
-      analytics_storage: analyticsConsent ? "granted" : "denied",
-      ad_storage: marketingConsent ? "granted" : "denied",
-      functionality_storage: "granted",
-      personalization_storage: marketingConsent ? "granted" : "denied",
-      security_storage: "granted"
-    });
-
-    console.log("gtm.init_consent gesendet mit Werten:", {
-      analytics_storage: analyticsConsent,
-      ad_storage: marketingConsent
-    });
-
-    // Banner entsprechend ausblenden oder anzeigen
-    if (cookieConsent === "true" || cookieConsent === "false") {
-      banner.style.display = "none";
-    } else {
-      banner.style.display = "flex";
-    }
+    updateConsentStatus(); // Initialer Consent an GTM
   }
 
-  // Event Listener für Buttons
-  acceptAllButton.addEventListener("click", function () {
+  // Button-Eventlistener:
+  acceptAllButton.addEventListener("click", () => {
     setCookie("cookieConsent", "true", 365);
     setCookie("analyticsConsent", "true", 365);
     setCookie("marketingConsent", "true", 365);
@@ -102,15 +72,15 @@ function initializeCookieBanner() {
     updateConsentStatus();
   });
 
-  acceptSelectedButton.addEventListener("click", function () {
+  acceptSelectedButton.addEventListener("click", () => {
     setCookie("cookieConsent", "true", 365);
-    setCookie("analyticsConsent", analyticsCheckbox.checked ? "true" : "false", 365);
-    setCookie("marketingConsent", marketingCheckbox.checked ? "true" : "false", 365);
+    setCookie("analyticsConsent", analyticsCheckbox.checked, 365);
+    setCookie("marketingConsent", marketingCheckbox.checked, 365);
     banner.style.display = "none";
     updateConsentStatus();
   });
 
-  declineAllButton.addEventListener("click", function () {
+  declineAllButton.addEventListener("click", () => {
     setCookie("cookieConsent", "false", 365);
     setCookie("analyticsConsent", "false", 365);
     setCookie("marketingConsent", "false", 365);
@@ -118,27 +88,9 @@ function initializeCookieBanner() {
     updateConsentStatus();
   });
 
-  // Consent-Status aktualisieren (hilfsfunktion)
-  function updateConsentStatus() {
-    const analyticsConsent = getCookie("analyticsConsent") === "true";
-    const marketingConsent = getCookie("marketingConsent") === "true";
-
-    gtag("consent", "update", {
-      analytics_storage: analyticsConsent ? "granted" : "denied",
-      ad_storage: marketingConsent ? "granted" : "denied",
-      functionality_storage: "granted",
-      personalization_storage: marketingConsent ? "granted" : "denied",
-      security_storage: "granted"
-    });
-
-    console.log("Consent aktualisiert:", {
-      analytics: analyticsConsent,
-      marketing: marketingConsent
-    });
-  }
-
-  checkExistingConsent();
+  // Consent-Status auch beim Laden der Seite setzen
+  updateConsentStatus();
 }
 
-// Event Listener um sicherzugehen, dass der DOM geladen ist
+// Prüfe den Consent-Status nach dem Laden der Seite
 document.addEventListener("DOMContentLoaded", initializeCookieBanner);
