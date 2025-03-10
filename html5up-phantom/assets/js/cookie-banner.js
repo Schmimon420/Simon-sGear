@@ -39,15 +39,13 @@ function initializeCookieBanner() {
     return null;
   }
 
+  // Sicherstellen, dass gtag verfügbar ist
+  window.gtag = window.gtag || function() { dataLayer.push(arguments); };
+
   // Consent-Status aktualisieren (Google Consent Mode)
   function updateConsentStatus() {
     const analyticsConsent = getCookie("analyticsConsent") === "true";
     const marketingConsent = getCookie("marketingConsent") === "true";
-
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
 
     gtag("consent", "update", {
       analytics_storage: analyticsConsent ? "granted" : "denied",
@@ -75,6 +73,19 @@ function initializeCookieBanner() {
     } else {
       banner.style.display = "flex"; // Banner anzeigen, wenn noch keine Entscheidung getroffen wurde
     }
+
+    // Initialisiere GTM mit dem aktuellen Consent-Status
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "gtm.init_consent",
+      analytics_storage: getCookie("analyticsConsent") === "true" ? "granted" : "denied",
+      ad_storage: getCookie("marketingConsent") === "true" ? "granted" : "denied",
+      functionality_storage: "granted",
+      personalization_storage: getCookie("marketingConsent") === "true" ? "granted" : "denied",
+      security_storage: "granted"
+    });
+
+    console.log("gtm.init_consent gesendet");
   }
 
   // Aufrufen der Funktion zur Prüfung der vorhandenen Zustimmung
