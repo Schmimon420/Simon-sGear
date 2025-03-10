@@ -24,7 +24,7 @@ function initializeCookieBanner() {
   function setCookie(name, value, days) {
     let date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax;`;
+    document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax;Secure`;
   }
 
   // Cookies auslesen
@@ -60,6 +60,9 @@ function initializeCookieBanner() {
       analytics: analyticsConsent,
       marketing: marketingConsent,
     });
+
+    // Event für den Google Tag Manager senden
+    gtag('event', 'consent_update');
   }
 
   // Überprüfen, ob der Benutzer bereits zugestimmt oder abgelehnt hat
@@ -100,6 +103,8 @@ function initializeCookieBanner() {
       personalization_storage: marketingConsent,
       ad_personalization: marketingConsent
     });
+
+    updateConsentStatus();
   }
 
   checkExistingConsent();
