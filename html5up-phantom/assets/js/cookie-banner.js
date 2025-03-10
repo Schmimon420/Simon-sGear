@@ -24,7 +24,7 @@ function initializeCookieBanner() {
   function setCookie(name, value, days) {
     let date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+    document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax;`;
   }
 
   // Cookies auslesen
@@ -39,21 +39,20 @@ function initializeCookieBanner() {
     return null;
   }
 
+  // Sicherstellen, dass gtag verfügbar ist
+  window.gtag = window.gtag || function() { dataLayer.push(arguments); };
+
   // Consent-Status aktualisieren (Google Consent Mode)
   function updateConsentStatus() {
     const analyticsConsent = getCookie("analyticsConsent") === "true";
     const marketingConsent = getCookie("marketingConsent") === "true";
-
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
 
     gtag("consent", "update", {
       analytics_storage: analyticsConsent ? "granted" : "denied",
       ad_storage: marketingConsent ? "granted" : "denied",
       functionality_storage: "granted",
       personalization_storage: marketingConsent ? "granted" : "denied",
+      ad_personalization: marketingConsent ? "granted" : "denied",
       security_storage: "granted",
     });
 
@@ -66,18 +65,43 @@ function initializeCookieBanner() {
   // Überprüfen, ob der Benutzer bereits zugestimmt oder abgelehnt hat
   function checkExistingConsent() {
     const cookieConsent = getCookie("cookieConsent");
+    let analyticsConsent = getCookie("analyticsConsent");
+    let marketingConsent = getCookie("marketingConsent");
+
     if (cookieConsent === "true") {
-      analyticsCheckbox.checked = getCookie("analyticsConsent") === "true";
-      marketingCheckbox.checked = getCookie("marketingConsent") === "true";
-      banner.style.display = "none"; // Banner ausblenden
+      analyticsCheckbox.checked = analyticsConsent === "true";
+      marketingCheckbox.checked = marketingConsent === "true";
+      banner.style.display = "none";
     } else if (cookieConsent === "false") {
-      banner.style.display = "none"; // Banner ausblenden, wenn abgelehnt
+      analyticsConsent = "false";
+      marketingConsent = "false";
+      banner.style.display = "none";
     } else {
-      banner.style.display = "flex"; // Banner anzeigen, wenn noch keine Entscheidung getroffen wurde
+      analyticsConsent = "false";
+      marketingConsent = "false";
+      banner.style.display = "flex";
     }
+
+    // Initialisiere GTM mit dem aktuellen Consent-Status
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "gtm.init_consent",
+      analytics_storage: analyticsConsent === "true" ? "granted" : "denied",
+      ad_storage: marketingConsent === "true" ? "granted" : "denied",
+      functionality_storage: "granted",
+      personalization_storage: marketingConsent === "true" ? "granted" : "denied",
+      ad_personalization: marketingConsent === "true" ? "granted" : "denied",
+      security_storage: "granted"
+    });
+
+    console.log("gtm.init_consent gesendet", {
+      analytics_storage: analyticsConsent,
+      ad_storage: marketingConsent,
+      personalization_storage: marketingConsent,
+      ad_personalization: marketingConsent
+    });
   }
 
-  // Aufrufen der Funktion zur Prüfung der vorhandenen Zustimmung
   checkExistingConsent();
 
   // Klick auf "Alle akzeptieren"
@@ -85,7 +109,7 @@ function initializeCookieBanner() {
     setCookie("cookieConsent", "true", 365);
     setCookie("analyticsConsent", "true", 365);
     setCookie("marketingConsent", "true", 365);
-    banner.style.display = "none"; // Banner ausblenden
+    banner.style.display = "none";
     updateConsentStatus();
   });
 
@@ -94,7 +118,7 @@ function initializeCookieBanner() {
     setCookie("cookieConsent", "true", 365);
     setCookie("analyticsConsent", analyticsCheckbox.checked ? "true" : "false", 365);
     setCookie("marketingConsent", marketingCheckbox.checked ? "true" : "false", 365);
-    banner.style.display = "none"; // Banner ausblenden
+    banner.style.display = "none";
     updateConsentStatus();
   });
 
@@ -103,18 +127,17 @@ function initializeCookieBanner() {
     setCookie("cookieConsent", "false", 365);
     setCookie("analyticsConsent", "false", 365);
     setCookie("marketingConsent", "false", 365);
-    banner.style.display = "none"; // Banner ausblenden
+    banner.style.display = "none";
     updateConsentStatus();
   });
 }
 
 // Warte auf das Laden des Cookie-Banners und initialisiere es
 document.addEventListener("DOMContentLoaded", function () {
-  // Prüfen, ob das Cookie-Banner bereits existiert, bevor die Funktion ausgeführt wird
   if (document.getElementById("cookie-banner")) {
     initializeCookieBanner();
   } else {
     console.log("Warte auf das Laden des Cookie-Banners...");
-    setTimeout(initializeCookieBanner, 500); // Warte 500ms und versuche es erneut
+    setTimeout(initializeCookieBanner, 500);
   }
 });
