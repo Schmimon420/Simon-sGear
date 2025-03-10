@@ -205,157 +205,160 @@
   <script src="assets/js/main.js"></script>
   <script src="assets/js/kontaktformular.js"></script>
 
-  <!-- Cookie-Banner Skript (Keine Flicker) -->
-  <script>
-  // --- Cookie-Banner Initialisierung ---
-  function initializeCookieBanner() {
-    const banner = document.getElementById("cookie-banner");
-    if (!banner) {
-      console.error("Cookie-Banner nicht gefunden! Wurde es geladen?");
-      return;
-    }
 
-    // Buttons
-    const acceptAllButton      = document.getElementById("accept-all");
-    const acceptSelectedButton = document.getElementById("accept-selected");
-    const declineAllButton     = document.getElementById("decline-all");
+ 
 
-    // Checkboxen
-    const analyticsCheckbox  = document.getElementById("analytics-cookies");
-    const marketingCheckbox  = document.getElementById("marketing-cookies");
 
-    if (!acceptAllButton || !acceptSelectedButton || !declineAllButton) {
-      console.error("Ein oder mehrere Buttons fehlen!");
-      return;
-    }
 
-    // Cookies setzen
-    function setCookie(name, value, days) {
-      let date = new Date();
-      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-      document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax;Secure`;
-    }
+// --- Cookie-Banner Initialisierung ---
+<script>
+function initializeCookieBanner() {
+  const banner = document.getElementById("cookie-banner");
+  if (!banner) {
+    console.error("Cookie-Banner nicht gefunden! Wurde es geladen?");
+    return;
+  }
 
-    // Cookies auslesen
-    function getCookie(name) {
-      let cookies = document.cookie.split("; ");
-      for (let cookie of cookies) {
-        let [cookieName, cookieValue] = cookie.split("=");
-        if (cookieName === name) {
-          return cookieValue;
-        }
+  // Buttons
+  const acceptAllButton = document.getElementById("accept-all");
+  const acceptSelectedButton = document.getElementById("accept-selected");
+  const declineAllButton = document.getElementById("decline-all");
+
+  // Checkboxen
+  const analyticsCheckbox = document.getElementById("analytics-cookies");
+  const marketingCheckbox = document.getElementById("marketing-cookies");
+
+  if (!acceptAllButton || !acceptSelectedButton || !declineAllButton) {
+    console.error("Ein oder mehrere Buttons fehlen!");
+    return;
+  }
+
+  // Cookies setzen
+  function setCookie(name, value, days) {
+    let date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+
+    // Falls lokal, Domain nicht setzen (sonst gibt es Probleme mit "localhost")
+    let domain = window.location.hostname.includes("localhost") ? "" : `domain=${window.location.hostname};`;
+
+    document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;${domain}SameSite=Lax;Secure`;
+  }
+
+  // Cookies auslesen
+  function getCookie(name) {
+    let cookies = document.cookie.split("; ");
+    for (let cookie of cookies) {
+      let [cookieName, cookieValue] = cookie.split("=");
+      if (cookieName === name) {
+        return cookieValue;
       }
-      return null;
     }
+    return null;
+  }
 
-    // gtag sicherstellen
-    window.gtag = window.gtag || function() { dataLayer.push(arguments); };
+  // gtag sicherstellen
+  window.gtag = window.gtag || function () { dataLayer.push(arguments); };
 
-    // Aktualisiert den Consent-Status für Google Consent Mode
-    function updateConsentStatus() {
-      const analyticsConsent  = getCookie("analyticsConsent")  === "true";
-      const marketingConsent  = getCookie("marketingConsent")  === "true";
+  // Aktualisiert den Consent-Status für Google Consent Mode
+  function updateConsentStatus() {
+    const analyticsConsent = getCookie("analyticsConsent") === "true";
+    const marketingConsent = getCookie("marketingConsent") === "true";
 
-      // Consent-Update an gtag
-      gtag("consent", "update", {
-        analytics_storage:   analyticsConsent ? "granted" : "denied",
-        ad_storage:          marketingConsent ? "granted" : "denied",
-        functionality_storage: "granted",
-        personalization_storage: marketingConsent ? "granted" : "denied",
-        ad_personalization: marketingConsent ? "granted" : "denied",
-        security_storage: "granted"
-      });
+    // Consent-Update an gtag
+    gtag("consent", "update", {
+      analytics_storage: analyticsConsent ? "granted" : "denied",
+      ad_storage: marketingConsent ? "granted" : "denied",
+      functionality_storage: "granted",
+      personalization_storage: marketingConsent ? "granted" : "denied",
+      ad_personalization: marketingConsent ? "granted" : "denied",
+      security_storage: "granted"
+    });
 
-      console.log("Consent aktualisiert:", {
-        analytics: analyticsConsent,
-        marketing: marketingConsent
-      });
+    console.log("Consent aktualisiert:", {
+      analytics: analyticsConsent,
+      marketing: marketingConsent
+    });
 
-      // Für den Tag Manager
-      gtag('event', 'consent_update');
-    }
+    // Für den Tag Manager
+    gtag('event', 'consent_update');
+  }
 
-    // Prüft vorhandenen Consent und blendet das Banner nur ein, wenn nötig
-    function checkExistingConsent() {
-      const cookieConsent = getCookie("cookieConsent");
-      let analyticsConsent = getCookie("analyticsConsent");
-      let marketingConsent = getCookie("marketingConsent");
+  // Prüft vorhandenen Consent und blendet das Banner nur ein, wenn nötig
+  function checkExistingConsent() {
+    const cookieConsent = getCookie("cookieConsent");
+    let analyticsConsent = getCookie("analyticsConsent");
+    let marketingConsent = getCookie("marketingConsent");
 
-      // Banner ist standardmäßig "display: none;"
-      // → Nur zeigen, wenn der Nutzer NOCH nicht entschieden hat
-      if (cookieConsent === "true") {
-        analyticsCheckbox.checked = (analyticsConsent === "true");
-        marketingCheckbox.checked = (marketingConsent === "true");
-        // Banner bleibt unsichtbar
-      } else if (cookieConsent === "false") {
-        analyticsConsent = "false";
-        marketingConsent = "false";
-        // Banner bleibt unsichtbar
-      } else {
-        // Noch keine Entscheidung -> Banner anzeigen
-        banner.style.display = "flex";
-      }
+    if (cookieConsent === "true") {
+      analyticsCheckbox.checked = (analyticsConsent === "true");
+      marketingCheckbox.checked = (marketingConsent === "true");
+      banner.style.display = "none";  // ✅ Verstecke Banner direkt
+    } else if (cookieConsent === "false") {
+      analyticsConsent = "false";
+      marketingConsent = "false";
+      banner.style.display = "none";  // ✅ Auch hier direkt ausblenden
+    } else {
+      // 🚨 Nur wenn der Nutzer noch keine Entscheidung getroffen hat:
+      banner.style.display = "flex";
 
-      // dataLayer-Event "gtm.init_consent"
+      // ✅ "gtm.init_consent" Event nur beim ersten Besuch senden
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "gtm.init_consent",
-        analytics_storage: (analyticsConsent === "true") ? "granted" : "denied",
-        ad_storage: (marketingConsent === "true") ? "granted" : "denied",
+        analytics_storage: "denied",
+        ad_storage: "denied",
         functionality_storage: "granted",
-        personalization_storage: (marketingConsent === "true") ? "granted" : "denied",
-        ad_personalization: (marketingConsent === "true") ? "granted" : "denied",
+        personalization_storage: "denied",
         security_storage: "granted"
       });
 
-      console.log("gtm.init_consent gesendet", {
-        analytics_storage: analyticsConsent,
-        ad_storage: marketingConsent
-      });
-
-      updateConsentStatus();
+      console.log("gtm.init_consent gesendet (Nutzer hat noch keine Entscheidung getroffen)");
     }
 
-    // Beim Laden prüfen
-    checkExistingConsent();
-
-    // Click Handler: Alle akzeptieren
-    acceptAllButton.addEventListener("click", () => {
-      setCookie("cookieConsent",      "true", 365);
-      setCookie("analyticsConsent",   "true", 365);
-      setCookie("marketingConsent",   "true", 365);
-      banner.style.display = "none";
-      updateConsentStatus();
-    });
-
-    // Click Handler: Auswahl speichern
-    acceptSelectedButton.addEventListener("click", () => {
-      setCookie("cookieConsent",      "true", 365);
-      setCookie("analyticsConsent",   analyticsCheckbox.checked ? "true" : "false", 365);
-      setCookie("marketingConsent",   marketingCheckbox.checked ? "true" : "false", 365);
-      banner.style.display = "none";
-      updateConsentStatus();
-    });
-
-    // Click Handler: Alle ablehnen
-    declineAllButton.addEventListener("click", () => {
-      setCookie("cookieConsent",      "false", 365);
-      setCookie("analyticsConsent",   "false", 365);
-      setCookie("marketingConsent",   "false", 365);
-      banner.style.display = "none";
-      updateConsentStatus();
-    });
+    updateConsentStatus();
   }
 
-  // DOMContentLoaded → Cookie Banner initialisieren
-  document.addEventListener("DOMContentLoaded", function () {
-    if (document.getElementById("cookie-banner")) {
-      initializeCookieBanner();
-    } else {
-      console.log("Warte auf das Laden des Cookie-Banners...");
-      setTimeout(initializeCookieBanner, 500);
-    }
+  // Beim Laden prüfen
+  checkExistingConsent();
+
+  // Click Handler: Alle akzeptieren
+  acceptAllButton.addEventListener("click", () => {
+    setCookie("cookieConsent", "true", 365);
+    setCookie("analyticsConsent", "true", 365);
+    setCookie("marketingConsent", "true", 365);
+    banner.style.display = "none";
+    updateConsentStatus();
   });
-  </script>
+
+  // Click Handler: Auswahl speichern
+  acceptSelectedButton.addEventListener("click", () => {
+    setCookie("cookieConsent", "true", 365);
+    setCookie("analyticsConsent", analyticsCheckbox.checked ? "true" : "false", 365);
+    setCookie("marketingConsent", marketingCheckbox.checked ? "true" : "false", 365);
+    banner.style.display = "none";
+    updateConsentStatus();
+  });
+
+  // Click Handler: Alle ablehnen
+  declineAllButton.addEventListener("click", () => {
+    setCookie("cookieConsent", "false", 365);
+    setCookie("analyticsConsent", "false", 365);
+    setCookie("marketingConsent", "false", 365);
+    banner.style.display = "none";
+    updateConsentStatus();
+  });
+}
+
+// DOMContentLoaded → Cookie Banner initialisieren
+document.addEventListener("DOMContentLoaded", function () {
+  if (document.getElementById("cookie-banner")) {
+    initializeCookieBanner();
+  } else {
+    console.log("Warte auf das Laden des Cookie-Banners...");
+    setTimeout(initializeCookieBanner, 500);
+  }
+});
+
+	</script>
 </body>
 </html>
