@@ -214,40 +214,7 @@
 
 
 
-<!-- Cookie-Banner einbinden -->
-<script>
-	if (!localStorage.getItem("cookieBannerLoaded")) {
-  fetch("cookie-banner.html")
-    .then(response => {
-      if (!response.ok) throw new Error("Cookie-Banner konnte nicht geladen werden.");
-      return response.text();
-    })
-    .then(html => {
-      // Banner HTML ins DOM
-      document.body.insertAdjacentHTML("beforeend", html);
 
-      // CSS laden
-      let css = document.createElement("link");
-      css.rel = "stylesheet";
-      css.href = "assets/css/cookie-banner.css";
-      document.head.appendChild(css);
-
-      // JavaScript NACHDEM das HTML eingefügt wurde
-      let script = document.createElement("script");
-      script.src = "assets/js/cookie-banner.js";
-      script.onload = () => console.log("Cookie-Banner-Skript erfolgreich geladen!");
-      document.body.appendChild(script);
-
-      // Markiere, dass das Banner (und Skript) geladen wurde
-      localStorage.setItem("cookieBannerLoaded", "true");
-    })
-    .catch(error => console.error("Fehler beim Laden des Cookie-Banners:", error));
-}
-  </script>
-  
-  
-  
-  
   
   
 
