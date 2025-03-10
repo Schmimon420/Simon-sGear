@@ -3,20 +3,22 @@
 <head>
 
 
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
 
-  gtag('consent', 'default', {
-    'analytics_storage': 'denied',
-    'ad_storage': 'denied',
-    'functionality_storage': 'granted',
-    'personalization_storage': 'denied',
-    'security_storage': 'granted'
-  });
-</script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+	  
+		gtag('consent', 'default', {
+		  'analytics_storage': 'denied',
+		  'ad_storage': 'denied',
+		  'functionality_storage': 'granted',
+		  'personalization_storage': 'denied',
+		  'security_storage': 'granted'
+		});
+	  </script>
+	  
 
-	
+
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -328,40 +330,39 @@
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/main.js"></script>
 	<script src="assets/js/kontaktformular.js"></script>
-    <script src="assets/js/cookie-banner.js"></script>
+
 
 
 
 <!-- Cookie-Banner einbinden -->
 <script>
 	if (!localStorage.getItem("cookieBannerLoaded")) {
-	  // Das Cookie-Banner nur einfügen, wenn es noch nicht angezeigt wurde
-	  fetch("cookie-banner.html")
-		.then(response => {
-		  if (!response.ok) throw new Error("Cookie-Banner konnte nicht geladen werden.");
-		  return response.text();
-		})
-		.then(html => {
-		  // Das Cookie-Banner HTML einfügen
-		  document.body.insertAdjacentHTML("beforeend", html);
-  
-		  // CSS für das Cookie-Banner laden
-		  let css = document.createElement("link");
-		  css.rel = "stylesheet";
-		  css.href = "assets/css/cookie-banner.css";
-		  document.head.appendChild(css);
-  
-		  // Das Skript für das Cookie-Banner laden, nachdem das HTML eingefügt wurde
-		  let script = document.createElement("script");
-		  script.src = "assets/js/cookie-banner.js";
-		  script.onload = () => console.log("Cookie-Banner-Skript erfolgreich geladen!");
-		  document.body.appendChild(script);
-  
-		  // Markiere, dass das Banner geladen wurde, damit es nicht erneut angezeigt wird
-		  localStorage.setItem("cookieBannerLoaded", "true");
-		})
-		.catch(error => console.error("Fehler beim Laden des Cookie-Banners:", error));
-	}
+  fetch("cookie-banner.html")
+    .then(response => {
+      if (!response.ok) throw new Error("Cookie-Banner konnte nicht geladen werden.");
+      return response.text();
+    })
+    .then(html => {
+      // Banner HTML ins DOM
+      document.body.insertAdjacentHTML("beforeend", html);
+
+      // CSS laden
+      let css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = "assets/css/cookie-banner.css";
+      document.head.appendChild(css);
+
+      // JavaScript NACHDEM das HTML eingefügt wurde
+      let script = document.createElement("script");
+      script.src = "assets/js/cookie-banner.js";
+      script.onload = () => console.log("Cookie-Banner-Skript erfolgreich geladen!");
+      document.body.appendChild(script);
+
+      // Markiere, dass das Banner (und Skript) geladen wurde
+      localStorage.setItem("cookieBannerLoaded", "true");
+    })
+    .catch(error => console.error("Fehler beim Laden des Cookie-Banners:", error));
+}
   </script>
   
 
