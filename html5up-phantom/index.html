@@ -135,11 +135,19 @@
 <script>
 document.getElementById("miete_mein_equipment_wrapper").addEventListener("click", function(event) {
     event.preventDefault(); // Verhindert sofortige Weiterleitung
+    
+    // GTM-Event senden
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        'event': 'klick_miete_mein_equipment'
+    });
+
     setTimeout(function() {
         window.open("https://www.gearbooker.com/profile/embed/ee8ba9e7-411e-4537-8c44-8e70e89cafdd", "_blank");
-    }, 500); // 500ms Verzögerung, damit GTM das Event tracken kann
+    }, 500); // 500ms Verzögerung für Tracking
 });
 </script>
+
 
 
           
