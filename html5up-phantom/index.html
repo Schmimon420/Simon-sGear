@@ -123,16 +123,24 @@
 
 
 
-<a href="https://www.gearbooker.com/profile/embed/ee8ba9e7-411e-4537-8c44-8e70e89cafdd"
-   target="_blank"
-   id="miete_mein_equipment_wrapper">
+<div id="miete_mein_equipment_wrapper" style="cursor: pointer;">
     <iframe id="miete_mein_equipment" 
         src="https://www.gearbooker.com/profile/embed/ee8ba9e7-411e-4537-8c44-8e70e89cafdd"
         style="border:none;overflow:hidden; width: 300%; height: 84px; 
         transform: scale(1.2); transform-origin: top left;"
         allowTransparency="true" frameBorder="0" scrolling="no">
     </iframe>
-</a>
+</div>
+
+<script>
+document.getElementById("miete_mein_equipment_wrapper").addEventListener("click", function(event) {
+    event.preventDefault(); // Verhindert sofortige Weiterleitung
+    setTimeout(function() {
+        window.open("https://www.gearbooker.com/profile/embed/ee8ba9e7-411e-4537-8c44-8e70e89cafdd", "_blank");
+    }, 500); // 500ms Verzögerung, damit GTM das Event tracken kann
+});
+</script>
+
 
           
 
