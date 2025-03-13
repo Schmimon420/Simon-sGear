@@ -104,6 +104,7 @@
     font-weight: bold;
     color: #000;
     margin-bottom: 8px;
+    position: relative;
 }
 
 /* Beschreibung */
@@ -141,3 +142,30 @@
         max-width: 60%; /* Kleinere maximale Bildgröße */
     }
 }
+
+.swiper-slide::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 100px; /* Größe anpassen */
+    height: 70px; /* Größe anpassen */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.swiper-slide[data-text-image]::after {
+    background-image: var(--slide-bg);
+}
+
+.swiper-slide {
+    position: relative;
+}
+
+.swiper-slide img.slide-image {
+    width: 80px; /* Statt 120px */
+    top: 5px; /* Etwas näher am oberen Rand */
+    right: 5px;
+}
+
