@@ -1,0 +1,167 @@
+/* Overlay-Hintergrund */
+#cookie-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6); /* Abgedunkelter Hintergrund */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container */
+.cookie-banner-content {
+  background: #ffffff;    /* Weißer Hintergrund */
+  color: #292929;         /* Hauptfarbe der Webseite */
+  width: 90%;
+  max-width: 500px;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  box-sizing: border-box;
+
+  /* 🚀 Schriftart anpassen (Hauptseite) */
+  font-family: "Source Sans Pro", Helvetica, sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 300 !important;
+  line-height: 1.75 !important;
+}
+
+/* Überschrift */
+.cookie-banner-content h3 {
+  margin-top: 0;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/* Beschreibungstext */
+.cookie-banner-content p {
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+/* Link */
+.cookie-banner-content a {
+  display: inline-block;
+  margin-top: 10px;
+  color: #0098db;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+.cookie-banner-content a:hover {
+  text-decoration: underline;
+}
+
+/* Checkbox-Optionen */
+.cookie-options {
+  text-align: left;
+  margin: 20px 0;
+}
+.cookie-options label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 300; /* Hauptstil der Webseite */
+  color: #292929;
+}
+
+/* ✅ Sichtbare Checkboxen NUR für das Cookie-Banner */
+.cookie-options input[type="checkbox"] {
+  all: unset; /* Entfernt alle Browser-Standard-Stile */
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+
+  width: 18px !important;
+  height: 18px !important;
+  border: 2px solid #292929 !important; /* Dunkler Rand passend zur Webseite */
+  background-color: white !important;
+  border-radius: 3px;
+  display: inline-block !important;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Wenn die Checkbox angehakt ist */
+.cookie-options input[type="checkbox"]:checked {
+  background-color: #292929 !important;
+  border-color: #292929 !important;
+}
+
+/* Häkchen-Symbol erzeugen */
+.cookie-options input[type="checkbox"]::after {
+  content: "✔";  /* Unicode-Häkchen */
+  font-size: 14px;
+  color: white;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  display: none;
+}
+
+/* Häkchen sichtbar machen, wenn aktiviert */
+.cookie-options input[type="checkbox"]:checked::after {
+  display: block;
+}
+
+/* Button-Container */
+.cookie-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Buttons */
+.cookie-buttons button {
+  font-size: 16px !important;
+  font-weight: bold !important;
+  padding: 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  color: #ffffff !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+
+  /* 💡 Perfekte Zentrierung */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+
+  /* 🚀 Gleiche Schriftart wie Hauptseite */
+  font-family: "Source Sans Pro", Helvetica, sans-serif !important;
+}
+
+/* Button-Farben */
+#accept-all {
+  background: #0098db; /* Blau */
+}
+#accept-selected {
+  background: #28a745; /* Grün */
+}
+#decline-all {
+  background: #dc3545; /* Rot */
+}
+
+/* Hover-Effekte */
+#accept-all:hover {
+  background: #007bb8;
+}
+#accept-selected:hover {
+  background: #218838;
+}
+#decline-all:hover {
+  background: #c82333;
+}

@@ -1,0 +1,97 @@
+/* Google Street View Carousel Styling */
+.swiper {
+    width: 100%;
+    height: 500px;
+    margin: 20px auto;
+    background-color: transparent; /* Hintergrund entfernt */
+}
+
+.swiper-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Google Street View Iframe */
+.swiper-slide iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px; /* Abgerundete Ecken für moderne Optik */
+}
+
+/* Navigation Buttons */
+.swiper-button-next, .swiper-button-prev {
+    color: #ffffff !important; 
+    padding: 10px;
+    border-radius: 50%;
+}
+
+/* Hintergrundbereich */
+.swiper-hintergrund {
+
+    width: 100vw; 
+    margin-left: calc(-50vw + 50%);
+    position: relative;
+    padding: 50px 0;
+    background-color: #f3fbff;
+
+}
+
+
+
+
+
+
+
+/* Text-Container unter dem Swiper */
+.swiper-text-container {
+    display: flex;
+    align-items: center;
+    
+    text-align: left;
+    margin-top: -70px; /* Weniger Abstand zum Swiper */
+    padding: 15px; /* Kleinere Innenabstände */
+
+    border-radius: 8px;
+    max-width: 1000px; /* Maximale Breite */
+    margin-left: auto; /* Links bündig */
+    margin-right: auto;
+    gap: 15px; /* Weniger Abstand zwischen Text und Bild */
+}
+
+/* Text-Bereich */
+.swiper-text {
+    flex: 1;
+
+}
+
+.swiper-text h3 {
+    margin-bottom: 8px;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #000;
+}
+
+.swiper-text p {
+    font-size: 1rem;
+    color: #333;
+    margin-top: 1px
+}
+
+/* Optionales Bild innerhalb des Text-Containers */
+.swiper-text-container img {
+    max-width: 40%;
+    height: auto;
+    border-radius: 8px;
+    flex-shrink: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 1;
+    transform: translateY(0);
+
+}
+
+/* Verhindert Platzhalter-Probleme */
+.swiper-text-container img:not([src]) {
+    display: none; /* Bild ausblenden, wenn kein src vorhanden ist */
+}
