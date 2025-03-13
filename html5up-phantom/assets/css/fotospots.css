@@ -1,74 +1,82 @@
-/* Google Street View Carousel Styling */
+/* Swiper Container */
 .swiper {
     width: 100%;
-    height: 500px;
+    height: 450px; /* Anpassbare Höhe */
     margin: 20px auto;
-    background-color: transparent; /* Hintergrund entfernt */
+    background-color: transparent;
 }
 
+/* Einzelnes Slide */
 .swiper-slide {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
 
-/* Google Street View Iframe */
+/* Google Maps Iframe */
 .swiper-slide iframe {
     width: 100%;
     height: 100%;
-    border-radius: 10px; /* Abgerundete Ecken für moderne Optik */
+    border-radius: 10px; /* Abgerundete Ecken für modernes Design */
 }
 
 /* Navigation Buttons */
 .swiper-button-next, .swiper-button-prev {
-    color: #ffffff !important; 
+    color: #ffffff !important;
     padding: 10px;
     border-radius: 50%;
 }
 
 /* Hintergrundbereich */
 .swiper-hintergrund {
-
-    width: 100vw; 
+    width: 100vw;
     margin-left: calc(-50vw + 50%);
     position: relative;
     padding: 50px 0;
     background-color: #f3fbff;
-
 }
 
+/* Swiper Pagination */
+.swiper-pagination {
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+}
 
+.swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background: #333;
+    opacity: 0.5;
+    margin: 0 5px;
+    border-radius: 50%;
+}
 
+.swiper-pagination-bullet-active {
+    background: #000;
+    opacity: 1;
+}
 
-
-
-
-/* Text-Container unter dem Swiper */
+/* Text unter dem Swiper */
 .swiper-text-container {
     display: flex;
-    align-items: center;
-    
-    text-align: left;
-    margin-top: -70px; /* Weniger Abstand zum Swiper */
-    padding: 15px; /* Kleinere Innenabstände */
-
-    border-radius: 8px;
-    max-width: 1000px; /* Maximale Breite */
-    margin-left: auto; /* Links bündig */
-    margin-right: auto;
-    gap: 15px; /* Weniger Abstand zwischen Text und Bild */
+    justify-content: center;
+    text-align: center;
+    padding: 15px;
+    max-width: 1000px;
+    margin: auto;
 }
 
-/* Text-Bereich */
+/* Text-Box */
 .swiper-text {
     flex: 1;
-
 }
 
 .swiper-text h3 {
     margin-bottom: 8px;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: bold;
     color: #000;
 }
@@ -76,7 +84,7 @@
 .swiper-text p {
     font-size: 1rem;
     color: #333;
-    margin-top: 1px
+    margin-top: 1px;
 }
 
 /* Optionales Bild innerhalb des Text-Containers */
@@ -88,10 +96,48 @@
     transition: opacity 0.3s ease, transform 0.3s ease;
     opacity: 1;
     transform: translateY(0);
+}
 
+/* Titel */
+#swiper-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 8px;
+}
+
+/* Beschreibung */
+#swiper-content {
+    font-size: 1rem;
+    color: #333;
 }
 
 /* Verhindert Platzhalter-Probleme */
 .swiper-text-container img:not([src]) {
     display: none; /* Bild ausblenden, wenn kein src vorhanden ist */
+}
+
+/* 🔹 **Mobile Optimierung für kleinere Bildschirme** */
+@media (max-width: 767px) {
+    .swiper {
+        height: 400px; /* Höhe des Swipers reduzieren */
+    }
+
+    .swiper-text-container {
+        flex-direction: column; /* Stapelt Text und Bild vertikal */
+        text-align: center; /* Text zentrieren */
+        gap: 10px; /* Weniger Abstand zwischen Text und Bild */
+    }
+
+    .swiper-text h3 {
+        font-size: 1.2rem; /* Kleinere Überschrift */
+    }
+
+    .swiper-text p {
+        font-size: 0.9rem; /* Kleinere Beschreibung */
+    }
+
+    .swiper-text-container img {
+        max-width: 60%; /* Kleinere maximale Bildgröße */
+    }
 }
