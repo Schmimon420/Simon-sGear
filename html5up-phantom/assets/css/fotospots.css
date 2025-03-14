@@ -128,6 +128,8 @@
         flex-direction: column; /* Stapelt Text und Bild vertikal */
         text-align: center; /* Text zentrieren */
         gap: 10px; /* Weniger Abstand zwischen Text und Bild */
+        margin-top:-70px
+
     }
 
     .swiper-text h3 {
