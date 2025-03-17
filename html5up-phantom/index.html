@@ -67,7 +67,7 @@
     <meta name="twitter:image" content="https://simonsgear.de/images/titelbild.jpg">
 
     <!-- Favicon -->
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="images/favicon_simonsgear.png" type="image/x-icon">
 
     <!-- Stylesheets und Scripts -->
     <link rel="stylesheet" href="https://www.deineseite.de/css/style.css">
@@ -361,6 +361,7 @@
 
 
 
+
 </div>
 </div>
 <!-- Swiper.js JavaScript -->
@@ -381,9 +382,62 @@
 
 
 
+
+
+
       </div>
+      
     </div>
 
+    
+
+    
+    <!-- Footer -->
+    <footer id="footer">
+      <div class="inner">
+        <section>
+          <h2>Kontakt</h2>
+          <form method="post" action="#">
+            <div class="fields">
+              <div class="field half">
+                <input type="text" name="name" id="name" placeholder="Name" />
+              </div>
+              <div class="field half">
+                <input type="email" name="email" id="email" placeholder="Email" />
+              </div>
+              <div class="field">
+                <textarea name="message" id="message" placeholder="Deine Nachricht"></textarea>
+              </div>
+            </div>
+            <ul class="actions">
+              <li><input type="submit" value="Senden" class="primary" /></li>
+            </ul>
+          </form>
+        </section>
+        <section>
+          <h2>Links</h2>
+          <!-- Gearbooker-Icon in einer eigenen Zeile -->
+          <div class="gearbooker-icon">
+            <a href="https://www.gearbooker.com/de/profile/ee8ba9e7-411e-4537-8c44-8e70e89cafdd" target="_blank">
+              <img src="images/gearbooker.png" alt="Gearbooker">
+            </a>
+          </div>
+          <!-- Andere Icons darunter in einer Zeile -->
+          <ul class="icons">
+            <li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+            <li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
+            <li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
+          </ul>
+        </section>
+        <ul class="copyright">
+          <li>
+            Miete jetzt dein Equipment: <a href="https://www.gearbooker.com/de/profile/ee8ba9e7-411e-4537-8c44-8e70e89cafdd">Simon's Gear</a>
+          </li>
+          <li><a href="/datenschutz.html">Datenschutz</a></li>
+          <li><a href="/impressum.html">Impressum</a></li>
+        </ul>
+      </div>
+    </footer>
     
 
 
@@ -403,8 +457,7 @@
  
 
 
-
-
+  <!-- Cookie-Banner Initialisierung -->
 <script>
 function initializeCookieBanner() {
   const banner = document.getElementById("cookie-banner");
@@ -555,52 +608,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	</script>
 
-  <!-- Footer -->
-  <footer id="footer">
-    <div class="inner">
-      <section>
-        <h2>Kontakt</h2>
-        <form method="post" action="#">
-          <div class="fields">
-            <div class="field half">
-              <input type="text" name="name" id="name" placeholder="Name" />
-            </div>
-            <div class="field half">
-              <input type="email" name="email" id="email" placeholder="Email" />
-            </div>
-            <div class="field">
-              <textarea name="message" id="message" placeholder="Deine Nachricht"></textarea>
-            </div>
-          </div>
-          <ul class="actions">
-            <li><input type="submit" value="Senden" class="primary" /></li>
-          </ul>
-        </form>
-      </section>
-      <section>
-        <h2>Links</h2>
-        <!-- Gearbooker-Icon in einer eigenen Zeile -->
-        <div class="gearbooker-icon">
-          <a href="https://www.gearbooker.com/de/profile/ee8ba9e7-411e-4537-8c44-8e70e89cafdd" target="_blank">
-            <img src="images/gearbooker.png" alt="Gearbooker">
-          </a>
-        </div>
-        <!-- Andere Icons darunter in einer Zeile -->
-        <ul class="icons">
-          <li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
-          <li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
-          <li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
-        </ul>
-      </section>
-      <ul class="copyright">
-        <li>
-          Miete jetzt dein Equipment: <a href="https://www.gearbooker.com/de/profile/ee8ba9e7-411e-4537-8c44-8e70e89cafdd">Simon's Gear</a>
-        </li>
-        <li><a href="/datenschutz.html">Datenschutz</a></li>
-        <li><a href="/impressum.html">Impressum</a></li>
-      </ul>
-    </div>
-  </footer>
+  
   <script>document.addEventListener("DOMContentLoaded", function () {
     if (window.innerWidth < 768) {
         const swiper = new Swiper(".swiper-container", {
@@ -617,5 +625,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
+
+
 </body>
+
 </html>
